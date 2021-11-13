@@ -91,21 +91,29 @@ def upload():
         list_of_files = os.listdir(output_folder)
         print(len(list_of_files))
 
-        k = file_path.endswith(".dcm")
-        if k:
-            dicom2png(file_path,output_folder)
-            print(len(list_of_files))
-        preds = model_predict(list_of_files[1], model)
-        os.remove(list_of_files[1])#removes file from the server after prediction has been returned
-        
-        # Arrange the correct return according to the model. 
-		#In this model 1 is Pneumonia and 0 is Normal.
         str1 = 'Pneumonia'
         str2 = 'Normal'
-        if preds == 1:
-            return str1
+        if file_path.endswith(".dcm"):
+            dicom2png(file_path,output_folder)
+            print(len(list_of_files))
+            preds = model_predict(list_of_files[0], model)
+            os.remove(list_of_files[0])#removes file from the server after prediction has been returned
+            if preds == 1:
+                return str1
+            else:
+                return str2
         else:
-            return str2
+            print('this is not a dicom file')
+            preds = model_predict(file_path, model)
+            os.remove(file_path)#removes file from the server after prediction has been returned
+            if preds == 1:
+                return str1
+            else:
+                return str2
+        # Arrange the correct return according to the model. 
+		#In this model 1 is Pneumonia and 0 is Normal.
+        
+        
 
     return None
 
