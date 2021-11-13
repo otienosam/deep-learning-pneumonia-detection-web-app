@@ -95,7 +95,7 @@ def upload():
         if file_path.endswith(".dcm"):
             dicom2png(file_path,output_folder)
         
-        list_of_files = os.listdir(source_folder)
+        list_of_files = os.listdir(output_folder)
         preds = model_predict(list_of_files[1], model)
         os.remove(list_of_files[1])#removes file from the server after prediction has been returned
         os.remove(list_of_files[0])
