@@ -6,6 +6,7 @@ import glob
 import re
 import numpy as np
 import png, pydicom
+import PIL
 
 # Keras
 from keras.applications.imagenet_utils import preprocess_input, decode_predictions
@@ -34,14 +35,12 @@ print('Model loaded. Start serving...')
 #model = ResNet50(weights='imagenet')
 #print('Model loaded. Check http://127.0.0.1:5000/')
 
-
 def model_predict(img_path, model):
     img = image.load_img(img_path, target_size=(64, 64)) #target_size must agree with what the trained model expects!!
 
     # Preprocessing the image
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis=0)
-
    
     preds = model.predict(img)
     return preds
@@ -68,13 +67,12 @@ def dicom2png(dicom_file,output_folder):
             print('dicom successfuly converted')
     except:
         print("could not convert dicom file")
-
-
+    
 @app.route('/', methods=['GET'])
 def index():
     # Main page
-    return render_template('index.html')
- 
+    return render_template('index.html')    
+      
 @app.route('/predict', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -87,17 +85,31 @@ def upload():
         f.save(file_path)
 	
         # Make prediction
-        preds = model_predict(file_path, model)
-        os.remove(file_path)#removes file from the server after prediction has been returned       
 
+        #if its dicom file
+        output_folder = os.path.join(basepath,'uploads')
+        list_of_files = os.listdir(output_folder)
+        print(len(list_of_files))
+
+        k = file_path.endswith(".dcm")
+        while k:
+            dicom2png(file_path,output_folder)
+            print(len(list_of_files))
+        preds = model_predict(list_of_files[1], model)
+        os.remove(list_of_files[1])#removes file from the server after prediction has been returned
+
+        preds = model_predict(file_path, model)
+        os.remove(file_path)
+        
         # Arrange the correct return according to the model. 
-		# In this model 1 is Pneumonia and 0 is Normal.
+		#In this model 1 is Pneumonia and 0 is Normal.
         str1 = 'Pneumonia'
         str2 = 'Normal'
         if preds == 1:
             return str1
         else:
             return str2
+
     return None
 
     #this section is used by gunicorn to serve the app on Heroku
@@ -107,3 +119,13 @@ if __name__ == '__main__':
     # Serve the app with gevent 
     #http_server = WSGIServer(('', 5000), app)
     #http_server.serve_forever()
+
+# Program checks if the number is positive or negative
+# And displays an appropriate message
+
+num = 3
+
+# Try these two variations as well. 
+# num = -5
+# num = 0
+    
