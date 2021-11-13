@@ -35,23 +35,16 @@ print('Model loaded. Start serving...')
 #model = ResNet50(weights='imagenet')
 #print('Model loaded. Check http://127.0.0.1:5000/')
 
-
 def model_predict(img_path, model):
     img = image.load_img(img_path, target_size=(64, 64)) #target_size must agree with what the trained model expects!!
 
     # Preprocessing the image
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis=0)
-
    
     preds = model.predict(img)
     return preds
 
-
-@app.route('/', methods=['GET'])
-def index():
-    # Main page
-    return render_template('index.html')
 def dicom2png(dicom_file,output_folder):
     try:
         ds = pydicom.dcmread(dicom_file)
@@ -74,9 +67,11 @@ def dicom2png(dicom_file,output_folder):
             print('dicom successfuly converted')
     except:
         print("could not convert dicom file")
-
-
     
+@app.route('/', methods=['GET'])
+def index():
+    # Main page
+    return render_template('index.html')    
       
 @app.route('/predict', methods=['GET', 'POST'])
 def upload():
@@ -86,18 +81,19 @@ def upload():
 
         # Save the file to ./uploads
         basepath = os.path.dirname(__file__)
-        file_path = os.path.join(
-            basepath, 'uploads', secure_filename(f.filename))
+        file_path = os.path.join(basepath, 'uploads', secure_filename(f.filename))
         f.save(file_path)
 	
         # Make prediction
         preds = model_predict(file_path, model)
+        os.remove(file_path)
 
         #if its dicom file
         output_folder = os.path.join(basepath,'uploads')
         if file_path.endswith(".dcm"):
             dicom2png(file_path,output_folder)
         list_of_files = os.listdir(output_folder)
+        print(len(list_of_files))
         preds = model_predict(list_of_files[1], model)
         os.remove(list_of_files[1])#removes file from the server after prediction has been returned
         
