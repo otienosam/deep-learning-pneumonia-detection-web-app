@@ -91,17 +91,16 @@ def upload():
         f.save(file_path)
 	
         # Make prediction
+        preds = model_predict(file_path, model)
+
+        #if its dicom file
         output_folder = os.path.join(basepath,'uploads')
         if file_path.endswith(".dcm"):
             dicom2png(file_path,output_folder)
-        
         list_of_files = os.listdir(output_folder)
         preds = model_predict(list_of_files[1], model)
         os.remove(list_of_files[1])#removes file from the server after prediction has been returned
-        os.remove(list_of_files[0])
-
         
-            
         # Arrange the correct return according to the model. 
 		#In this model 1 is Pneumonia and 0 is Normal.
         str1 = 'Pneumonia'
