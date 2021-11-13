@@ -68,7 +68,7 @@ def dicom2png(dicom_file,output_folder):
 
     # Write the PNG file
     # with open(f'{dicom_file.strip(".dcm")}.png', 'wb') as png_file:
-    with open(os.path.join(output_folder,file)+'.png' , 'wb') as png_file:
+    with open(os.path.join(output_folder,dicom_file)+'.png' , 'wb') as png_file:
         w = png.Writer(shape[1], shape[0], greyscale=True)
         w.write(png_file, image_2d_scaled)
         print('file successfuly converted')
