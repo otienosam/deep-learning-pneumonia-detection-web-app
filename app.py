@@ -53,31 +53,26 @@ def index():
     # Main page
     return render_template('index.html')
 def dicom2png(dicom_file,output_folder):
-    try:
-        ds = pydicom.dcmread(dicom_file)
-        shape = ds.pixel_array.shape
 
-        # Convert to float to avoid overflow or underflow losses.
-        image_2d = ds.pixel_array.astype(float)
+    ds = pydicom.dcmread(dicom_file)
+    shape = ds.pixel_array.shape
 
-        # Rescaling grey scale between 0-255
-        image_2d_scaled = (np.maximum(image_2d,0) / image_2d.max()) * 255.0
+    # Convert to float to avoid overflow or underflow losses.
+    image_2d = ds.pixel_array.astype(float)
 
-        # Convert to uint
-        image_2d_scaled = np.uint8(image_2d_scaled)
+    # Rescaling grey scale between 0-255
+    image_2d_scaled = (np.maximum(image_2d,0) / image_2d.max()) * 255.0
 
-        # Write the PNG file
-        # with open(f'{dicom_file.strip(".dcm")}.png', 'wb') as png_file:
-        with open(os.path.join(output_folder,file)+'.png' , 'wb') as png_file:
-            w = png.Writer(shape[1], shape[0], greyscale=True)
-            w.write(png_file, image_2d_scaled)
-            print('file successfuly converted')
-    except:
-        print('Could not convert')
-    return
+    # Convert to uint
+    image_2d_scaled = np.uint8(image_2d_scaled)
 
-
-
+    # Write the PNG file
+    # with open(f'{dicom_file.strip(".dcm")}.png', 'wb') as png_file:
+    with open(os.path.join(output_folder,file)+'.png' , 'wb') as png_file:
+        w = png.Writer(shape[1], shape[0], greyscale=True)
+        w.write(png_file, image_2d_scaled)
+        print('file successfuly converted')
+      
 @app.route('/predict', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -94,10 +89,9 @@ def upload():
         output_folder = os.path.join(basepath,'uploads')
         if file_path.endswith(".dcm"):
             dicom2png(file_path,output_folder)
-            os.remove(file_path)#removes file from the server after prediction has been returned
-        
+             
         preds = model_predict(file_path, model)
-        os.remove(file_path)
+        os.remove(file_path)#removes file from the server after prediction has been returned
 
         
             
