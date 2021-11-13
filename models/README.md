@@ -1,1 +1,1 @@
-Put your own trained .h5 models in this directory.
+model.h5 is in this directory.
