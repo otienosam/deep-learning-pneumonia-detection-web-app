@@ -72,7 +72,7 @@ def dicom2png(dicom_file,output_folder):
             w = png.Writer(shape[1], shape[0], greyscale=True)
             w.write(png_file, image_2d_scaled)
     except:
-        print('Could not convert: ', file)
+        print('Could not convert')
     return
 
 
