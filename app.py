@@ -89,19 +89,16 @@ def upload():
             basepath, 'uploads', secure_filename(f.filename))
         f.save(file_path)
 	
-	
         # Make prediction
-        try:
-            global preds = model_predict(file_path, model)
-            os.remove(file_path)#removes file from the server after prediction has been returned
-        except PIL.UnidentifiedImageError:
-            output_folder = os.path.join(basepath,'uploads')
+        output_folder = os.path.join(basepath,'uploads')
+        if file_path.endswith(".dcm"):
             dicom2png(file_path,output_folder)
-            if file_path.endswith(".dcm"):
-                os.remove(file_path)
-            if file_path.endswith(".png"):
-                preds = model_predict(file_path, model)
-                os.remove(file_path)
+            os.remove(file_path)#removes file from the server after prediction has been returned
+        else:
+            preds = model_predict(file_path, model)
+            os.remove(file_path)
+
+        
             
         # Arrange the correct return according to the model. 
 		#In this model 1 is Pneumonia and 0 is Normal.
