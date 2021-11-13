@@ -63,10 +63,11 @@ def upload():
         file_path = os.path.join(
             basepath, 'uploads', secure_filename(f.filename))
         f.save(file_path)
-
+	
+	
         # Make prediction
-	print(filepath)
         preds = model_predict(file_path, model)
+	print("model sent for prediction")
         os.remove(file_path)#removes file from the server after prediction has been returned
 
         # Arrange the correct return according to the model. 
