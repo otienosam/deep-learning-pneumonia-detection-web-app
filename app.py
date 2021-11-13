@@ -67,7 +67,6 @@ def upload():
 	
         # Make prediction
         preds = model_predict(file_path, model)
-	print("model sent for prediction")
         os.remove(file_path)#removes file from the server after prediction has been returned
 
         # Arrange the correct return according to the model. 
