@@ -92,7 +92,11 @@ def upload():
         for i in list_of_files:
             if i.endswith('.png'):
                 continue
-            if i.endswith('.jpg')
+            if i.endswith('.jpg'):
+                continue
+            if i.endswith('.jpeg'):
+                continue
+            if i.endswith('.dcm'):
                 continue
             else:
                 os.remove(i)
