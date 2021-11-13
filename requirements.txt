@@ -9,4 +9,3 @@ tensorflow==1.12.2
 gunicorn>=19.5.0
 pypng==0.0.21
 pydicom==1.2.1
-pillow==5.0.0
