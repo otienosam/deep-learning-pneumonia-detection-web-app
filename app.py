@@ -90,7 +90,13 @@ def upload():
         output_folder = os.path.join(basepath,'uploads')
         list_of_files = os.listdir(output_folder)
         for i in list_of_files:
-            os.remove(i)
+            if i.endswith('.png'):
+                continue
+            if i.endswith('.jpg')
+                continue
+            else:
+                os.remove(i)
+                
         print(len(list_of_files))
 
 
