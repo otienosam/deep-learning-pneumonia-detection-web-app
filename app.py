@@ -85,18 +85,8 @@ def upload():
         basepath = os.path.dirname(__file__)
         file_path = os.path.join(basepath, 'uploads', secure_filename(f.filename))
         f.save(file_path)
-
-        output_folder = os.path.join(basepath,'uploads')
-        list_of_files = os.listdir(output_folder)
-        print(len(list_of_files))
 	
         # Make prediction
-        if file_path.endswith('.dcom'):
-            dicom2png(file_path,output_folder)
-        print(len(list_of_files))
-        preds = model_predict(list_of_files[1], model)
-        else:
-            print('This is not a dicom file')
         preds = model_predict(file_path, model)
         os.remove(file_path)#removes file from the server after prediction has been returned       
 
