@@ -92,7 +92,7 @@ def upload():
 	
         # Make prediction
         try:
-            preds = model_predict(file_path, model)
+            global preds = model_predict(file_path, model)
             os.remove(file_path)#removes file from the server after prediction has been returned
         except PIL.UnidentifiedImageError:
             output_folder = os.path.join(basepath,'uploads')
