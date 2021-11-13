@@ -102,15 +102,16 @@ def upload():
             if file_path.endswith(".png"):
                 preds = model_predict(file_path, model)
                 os.remove(file_path)
-
-        # Arrange the correct return according to the model. 
-		# In this model 1 is Pneumonia and 0 is Normal.
-        str1 = 'Pneumonia'
-        str2 = 'Normal'
-        if preds == 1:
-            return str1
-        else:
-            return str2
+            
+            # Arrange the correct return according to the model. 
+		    # In this model 1 is Pneumonia and 0 is Normal.
+            str1 = 'Pneumonia'
+            str2 = 'Normal'
+            if preds == 1:
+                return str1
+            else:
+                return str2
+                
     return None
 
     #this section is used by gunicorn to serve the app on Heroku
