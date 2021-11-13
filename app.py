@@ -89,15 +89,18 @@ def upload():
         #if its dicom file
         output_folder = os.path.join(basepath,'uploads')
         list_of_files = os.listdir(output_folder)
+        for i in list_of_files:
+            os.remove(i)
         print(len(list_of_files))
+
 
         str1 = 'Pneumonia'
         str2 = 'Normal'
         if file_path.endswith(".dcm"):
             dicom2png(file_path,output_folder)
             print(len(list_of_files))
-            preds = model_predict(list_of_files[0], model)
-            os.remove(list_of_files[0])#removes file from the server after prediction has been returned
+            preds = model_predict(list_of_files[1], model)
+            os.remove(list_of_files[1])#removes file from the server after prediction has been returned
             if preds == 1:
                 return str1
             else:
@@ -105,15 +108,13 @@ def upload():
         else:
             print('this is not a dicom file')
             preds = model_predict(file_path, model)
-            os.remove(file_path)#removes file from the server after prediction has been returned
+            os.remove(file_path) 
             if preds == 1:
                 return str1
             else:
                 return str2
         # Arrange the correct return according to the model. 
 		#In this model 1 is Pneumonia and 0 is Normal.
-        
-        
 
     return None
 
@@ -125,12 +126,4 @@ if __name__ == '__main__':
     #http_server = WSGIServer(('', 5000), app)
     #http_server.serve_forever()
 
-# Program checks if the number is positive or negative
-# And displays an appropriate message
-
-num = 3
-
-# Try these two variations as well. 
-# num = -5
-# num = 0
     
