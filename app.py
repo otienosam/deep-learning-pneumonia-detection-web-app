@@ -52,7 +52,7 @@ def model_predict(img_path, model):
 def index():
     # Main page
     return render_template('index.html')
-def dicom2png(dicom_file):
+def dicom2png(dicom_file,output_folder):
     try:
         ds = pydicom.dcmread(dicom_file)
         shape = ds.pixel_array.shape
@@ -67,13 +67,13 @@ def dicom2png(dicom_file):
         image_2d_scaled = np.uint8(image_2d_scaled)
 
         # Write the PNG file
-        with open(f'{dicom_file.strip(".dcm")}.png', 'wb') as png_file:
-        # with open(os.path.join(output_folder,file)+'.png' , 'wb') as png_file:
+        # with open(f'{dicom_file.strip(".dcm")}.png', 'wb') as png_file:
+        with open(os.path.join(output_folder,file)+'.png' , 'wb') as png_file:
             w = png.Writer(shape[1], shape[0], greyscale=True)
             w.write(png_file, image_2d_scaled)
     except:
         print('Could not convert: ', file)
-    return png_file
+    return
 
 
 
@@ -95,9 +95,13 @@ def upload():
             preds = model_predict(file_path, model)
             os.remove(file_path)#removes file from the server after prediction has been returned
         except PIL.UnidentifiedImageError:
-            w = dicom2png(file_path)
-            preds = model_predict(w, model)
-            os.remove(w)
+            output_folder = os.path.join(basepath,'uploads')
+            dicom2png(file_path,output_folder)
+            if file_path.endswith(".dcm"):
+                os.remove(file_path)
+            if file_path.endswith(".png"):
+                preds = model_predict(file_path, model)
+                os.remove(file_path)
 
         # Arrange the correct return according to the model. 
 		# In this model 1 is Pneumonia and 0 is Normal.
