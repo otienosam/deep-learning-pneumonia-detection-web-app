@@ -73,7 +73,7 @@ def dicom2png(dicom_file):
             w.write(png_file, image_2d_scaled)
     except:
         print('Could not convert: ', file)
-    return w
+    return png_file
 
 
 
