@@ -92,8 +92,6 @@ def upload():
         input_folder = os.path.join(basepath,'uploads')
         output_folder = os.path.join(basepath,'dicom_png')
         list_of_files = os.listdir(output_folder)
-        print(list_of_files)
-
 
         str1 = 'Pneumonia'
         str2 = 'Normal'
@@ -101,6 +99,7 @@ def upload():
             dicom2png(input_folder,output_folder)
             dicom_path = os.path.join(basepath, 'dicom_png', secure_filename(f.filename))
             print(list_of_files)
+            print(list_of_files[-1])
             f.save(list_of_files[-1])
             preds = model_predict(list_of_files[-1], model)
             os.remove(list_of_files[-1])#removes file from the server after prediction has been returned
