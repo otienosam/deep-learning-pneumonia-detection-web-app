@@ -92,7 +92,7 @@ def upload():
         if f.filename.endswith('.dcm'):
             dicom_path = os.path.join(input_folder, secure_filename(f.filename))
             f.save(dicom_path)
-            print('dicom file successfully saved'
+            print('dicom file successfully saved')
 
             # convert dicom to png
             dicom2png(input_folder,output_folder)
