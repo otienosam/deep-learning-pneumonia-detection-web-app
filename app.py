@@ -92,11 +92,11 @@ def upload():
         if f.filename.endswith('.dcm'):
             dicom_path = os.path.join(input_folder, secure_filename(f.filename))
             f.save(dicom_path)
-            print('dicom file successfully saved')
-            os.remove(dicom_path)
+            print('dicom file successfully saved'
 
-            # convert dicom to pn
+            # convert dicom to png
             dicom2png(input_folder,output_folder)
+            os.remove(dicom_path)
             list_of_output = os.listdir(output_folder)
             print(list_of_output)
             # preds = model_predict(file_path, model)
