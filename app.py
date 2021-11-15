@@ -49,7 +49,7 @@ def model_predict(img_path, model):
 def dicom2png(source_folder, output_folder):
     list_of_files = os.listdir(source_folder)
     for file in list_of_files:
-        if file.endswith('.md'):
+        if not file.endswith('.dcm'):
             continue
         try:
             ds = pydicom.dcmread(os.path.join(source_folder,file))
