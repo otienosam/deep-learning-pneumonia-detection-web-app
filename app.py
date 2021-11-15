@@ -100,12 +100,12 @@ def upload():
             dicom2png(input_folder,output_folder)
             os.remove(dicom_path)
             print(len(os.listdir(output_folder))
-            preds= model_predict(file_list[0], model)
-            os.remove(file_list[0]) 
-            if preds == 1:
-                return str1
-            else:
-                return str2
+            # preds= model_predict(file_list[0], model)
+            # os.remove(file_list[0]) 
+            # if preds == 1:
+            #     return str1
+            # else:
+            #     return str2
         else:
             file_path = os.path.join(output_folder, secure_filename(f.filename))
             f.save(file_path)
