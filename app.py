@@ -104,8 +104,8 @@ def upload():
             f.save(dicom_path)
             print(list_of_files)
             print(dicom_path)
-            preds = model_predict(list_of_files[2], model)
-            os.remove(list_of_files[2])#removes file from the server after prediction has been returned
+            preds = model_predict(list_of_files[-1], model)
+            os.remove(list_of_files[-1])#removes file from the server after prediction has been returned
             os.remove(list_of_files[0])
             if preds == 1:
                 return str1
