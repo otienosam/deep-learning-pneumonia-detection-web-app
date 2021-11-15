@@ -97,17 +97,24 @@ def upload():
 
             # convert dicom to pn
             dicom2png(input_folder,output_folder)
-            
-        file_path = os.path.join(output_folder, secure_filename(f.filename))
-        f.save(file_path)
-        list_of_output = os.listdir(output_folder)
-        print(list_of_output)
-        preds = model_predict(file_path, model)
-        os.remove(file_path) 
-        if preds == 1:
-            return str1
+            list_of_output = os.listdir(output_folder)
+            print(list_of_output)
+            # preds = model_predict(file_path, model)
+            # os.remove(file_path) 
+            # if preds == 1:
+            #     return str1
+            # else:
+            #     return str2
         else:
-            return str2
+            file_path = os.path.join(output_folder, secure_filename(f.filename))
+            f.save(file_path)
+            preds = model_predict(file_path, model)
+            os.remove(file_path) 
+            if preds == 1:
+                return str1
+            else:
+                return str2    
+        
 
     return None
 
