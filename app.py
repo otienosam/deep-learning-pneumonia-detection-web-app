@@ -105,7 +105,7 @@ def upload():
             #preds = model_predict(file_path, model)
         else:
             file_path = os.path.join(output_folder, secure_filename(f.filename))
-            f.save(filepath_path)
+            f.save(file_path)
             print('image file successfully saved')
             preds = model_predict(file_path, model)
             os.remove(file_path) 
