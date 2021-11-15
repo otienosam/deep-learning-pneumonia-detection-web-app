@@ -96,6 +96,7 @@ def upload():
             
             # convert dicom to png
             file_list = os.listdir(output_folder)
+            
             print(len(file_list))
             dicom2png(input_folder,output_folder)
             os.remove(dicom_path)
