@@ -100,14 +100,12 @@ def upload():
             list_of_output = os.listdir(output_folder)
             print(list_of_output)
             for file in list_of_output:
-                if file.endswith('.md'):
-                    continue
-                preds = model_predict(file, model)
-                os.remove(file) 
-                if preds == 1:
-                    return str1
-                else:
-                    return str2
+                if file.endswith('.png'):
+                    preds = model_predict(file, model)
+                    if preds == 1:
+                        return str1
+                    else:
+                        return str2  
         else:
             file_path = os.path.join(output_folder, secure_filename(f.filename))
             f.save(file_path)
