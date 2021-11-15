@@ -109,6 +109,7 @@ def upload():
         else:
             file_path = os.path.join(output_folder, secure_filename(f.filename))
             f.save(file_path)
+            print(file_path)
             preds = model_predict(file_path, model)
             os.remove(file_path) 
             if preds == 1:
