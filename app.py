@@ -94,13 +94,14 @@ def upload():
             f.save(dicom_path)
             print('dicom file successfully saved')
             os.remove(dicom_path)
-            
+
             # convert dicom to pn
             dicom2png(input_folder,output_folder)
             
         file_path = os.path.join(output_folder, secure_filename(f.filename))
         f.save(file_path)
-        print('image file successfully saved')
+        list_of_output = os.listdir(output_folder)
+        print(list_of_output)
         preds = model_predict(file_path, model)
         os.remove(file_path) 
         if preds == 1:
