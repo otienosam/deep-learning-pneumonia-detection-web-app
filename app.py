@@ -99,12 +99,15 @@ def upload():
             os.remove(dicom_path)
             list_of_output = os.listdir(output_folder)
             print(list_of_output)
-            # preds = model_predict(file_path, model)
-            # os.remove(file_path) 
-            # if preds == 1:
-            #     return str1
-            # else:
-            #     return str2
+            for file in list_of_output:
+                if file.endswith('.md'):
+                    continue
+                preds = model_predict(file, model)
+                os.remove(file) 
+                if preds == 1:
+                    return str1
+                else:
+                    return str2
         else:
             file_path = os.path.join(output_folder, secure_filename(f.filename))
             f.save(file_path)
