@@ -95,11 +95,11 @@ def upload():
             print('dicom file successfully saved')
             
             # convert dicom to png
-            print(len(listdir(output_folder)))
+            print(len(os.listdir(output_folder)))
             dicom2png(input_folder,output_folder)
             os.remove(dicom_path)
-            print(len(listdir(output_folder)))
-            print(listdir(output_folder))
+            print(len(os.listdir(output_folder)))
+            print(os.listdir(output_folder))
 
             # make prediction
             #preds = model_predict(file_path, model)
