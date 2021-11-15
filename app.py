@@ -68,7 +68,6 @@ def dicom2png(source_folder, output_folder):
             with open(os.path.join(output_folder,file)+'.png' , 'wb') as png_file:
                 w = png.Writer(shape[1], shape[0], greyscale=True)
                 w.write(png_file, image_2d_scaled)
-            os.remove(file)
         except:
             print('Could not convert: ', file)
 
@@ -106,7 +105,6 @@ def upload():
             print(dicom_path)
             preds = model_predict(list_of_files[-1], model)
             os.remove(list_of_files[-1])#removes file from the server after prediction has been returned
-            os.remove(list_of_files[0])
             if preds == 1:
                 return str1
             else:
