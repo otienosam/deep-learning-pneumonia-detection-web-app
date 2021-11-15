@@ -82,40 +82,38 @@ def upload():
         # Get the file from post request
         f = request.files['file']
 
-        # Save the file to ./uploads
+        # Save the file to ./uploads or ./dcm_png
         basepath = os.path.dirname(__file__)
-        file_path = os.path.join(basepath, 'uploads', secure_filename(f.filename))
-        f.save(file_path)
-	
-	
-        # Make prediction
-        input_folder = os.path.join(basepath,'uploads')
-        output_folder = os.path.join(basepath,'dicom_png')
-        list_of_files = os.listdir(output_folder)
-
+        input_folder = os.path.join(basepath,'dicom_png')
+        output_folder = os.path.join(basepath,'uploads')
         str1 = 'Pneumonia'
         str2 = 'Normal'
-        if file_path.endswith(".dcm"):
+        
+        if f.filename.endswith('.dcm'):
+            dicom_path = os.path.join(input_folder, secure_filename(f.filename))
+            f.save(dicom_path)
+            print('dicom file successfully saved')
+            
+            # convert dicom to png
+            print(len(listdir(output_folder)))
             dicom2png(input_folder,output_folder)
-            dicom_path = os.path.join(basepath, 'dicom_png', secure_filename(f.filename))
-            print(list_of_files)
-            print(list_of_files[-1])
-            f.save(list_of_files[-1])
-            preds = model_predict(list_of_files[-1], model)
-            os.remove(list_of_files[-1])#removes file from the server after prediction has been returned
-            os.remove(list_of_files[0])
-            if preds == 1:
-                return str1
-            else:
-                return str2
+            os.remove(dicom_path)
+            print(len(listdir(output_folder)))
+            print(listdir(output_folder))
+
+            # make prediction
+            #preds = model_predict(file_path, model)
         else:
-            print('this is not a dicom file')
+            file_path = os.path.join(output_folder, secure_filename(f.filename))
+            f.save(filepath_path)
+            print('image file successfully saved')
             preds = model_predict(file_path, model)
             os.remove(file_path) 
             if preds == 1:
                 return str1
             else:
                 return str2
+
     return None
 
     #this section is used by gunicorn to serve the app on Heroku
