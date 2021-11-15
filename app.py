@@ -102,7 +102,7 @@ def upload():
             print(len(os.listdir(output_folder))
 
             # make prediction
-            preds = model_predict(file_list[0], model
+            preds = model_predict(file_list[0], model)
             os.remove(file_list[0]) 
             if preds == 1:
                 return str1
