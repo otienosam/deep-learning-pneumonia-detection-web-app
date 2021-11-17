@@ -7,6 +7,10 @@ import re
 import numpy as np
 import png, pydicom
 
+#tensorflow
+import tensorflow as tf
+import tensorflow_io as tfio
+
 # Keras
 from keras.applications.imagenet_utils import preprocess_input, decode_predictions
 from keras.models import load_model
@@ -95,17 +99,28 @@ def upload():
             print('dicom file successfully saved')
 
             # convert dicom to png
-            dicom2png(input_folder,output_folder)
-            os.remove(dicom_path)
-            list_of_output = os.listdir(output_folder)
-            print(list_of_output)
-            for file in list_of_output:
-                if file.endswith('.png'):
-                    preds = model_predict(file, model)
-                    if preds == 1:
-                        return str1
-                    else:
-                        return str2  
+            image_bytes = tf.io.read_file(dicom_path)
+            image = tfio.image.decode_dicom_image(image_bytes, dtype=tf.uint16)
+            preds = model_predict(image, model)
+            os.remove(image) 
+            if preds == 1:
+                return str1
+            else:
+                return str2  
+            # dicom2png(input_folder,output_folder)
+            # os.remove(dicom_path)
+            # list_of_output = os.listdir(output_folder)
+            # print(list_of_output)
+            
+            # for file in list_of_output:
+            #     if file.endswith('.png'):
+            #         f.save(file)
+            #         preds = model_predict(file, model)
+            #         os.remove(file)
+            #         if preds == 1:
+            #             return str1
+            #         else:
+            #             return str2  
         else:
             file_path = os.path.join(output_folder, secure_filename(f.filename))
             f.save(file_path)
@@ -116,7 +131,6 @@ def upload():
                 return str1
             else:
                 return str2    
-        
 
     return None
 
